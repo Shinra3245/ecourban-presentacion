@@ -225,6 +225,7 @@ function PuenteBanca({ lite, reducido }: { lite: boolean; reducido: boolean }) {
       <Suspense fallback={null}>
         <Persona
           perfil={PERFIL_ACTION_SUIT}
+          lite={lite}
           pose={POSE_PERSONA_SENTADA_ESTABLE}
           posicion={[0, 0, 0]}
           rotacionY={lite ? -0.34 : -0.42}
@@ -239,8 +240,8 @@ export default function EscenaProceso({ lite, reducido }: { lite: boolean; reduc
   return (
     <Canvas
       frameloop="demand"
-      dpr={lite ? [1, 1.25] : [1, 2]}
-      shadows="percentage"
+      dpr={lite ? 1 : [1, 2]}
+      shadows={!lite}
       camera={{ fov: FOV_PUENTE, near: 0.05, far: 60, position: [0, 0.9, 3.367] }}
       gl={{ antialias: !lite, alpha: true, powerPreference: "high-performance" }}
       aria-hidden="true"

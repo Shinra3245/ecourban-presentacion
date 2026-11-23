@@ -276,6 +276,7 @@ function Contenido({ lite, personaPreparada }: { lite: boolean; personaPreparada
           <Suspense fallback={null}>
             <Persona
               perfil={PERFIL_ACTION_SUIT}
+              lite={lite}
               obtenerPose={obtenerPosePersona}
               visible={personaVisible}
               sombras={!lite}
@@ -328,8 +329,8 @@ export default function Escena({ lite, personaPreparada = true }: { lite: boolea
   return (
     <Canvas
       frameloop="demand"
-      dpr={lite ? [1, 1.25] : [1, 2]}
-      shadows="percentage"
+      dpr={lite ? 1 : [1, 2]}
+      shadows={!lite}
       camera={{ fov: 35, near: 0.05, far: 50, position: [0, 1, 3.6] }}
       gl={{ antialias: !lite, alpha: true, powerPreference: "high-performance" }}
       aria-hidden="true"

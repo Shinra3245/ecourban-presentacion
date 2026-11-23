@@ -42,7 +42,10 @@ export function SeccionFlujo({ webgl, reducido, lite }: Props) {
   const conEscena = webgl && !sinEscena;
 
   useEffect(() => {
-    if (!conEscena || escenaPreparada) return;
+    if (!conEscena) {
+      setEscenaPreparada(false);
+      return;
+    }
     const el = seccion.current;
     if (!el) return;
     if (typeof IntersectionObserver === "undefined") {
@@ -51,15 +54,13 @@ export function SeccionFlujo({ webgl, reducido, lite }: Props) {
     }
     const observer = new IntersectionObserver(
       ([entrada]) => {
-        if (!entrada.isIntersecting) return;
-        setEscenaPreparada(true);
-        observer.disconnect();
+        setEscenaPreparada(entrada.isIntersecting);
       },
-      { rootMargin: "900px 0px" },
+      { rootMargin: "120px 0px" },
     );
     observer.observe(el);
     return () => observer.disconnect();
-  }, [conEscena, escenaPreparada]);
+  }, [conEscena]);
 
   const aplicar = useCallback(
     (p: number, forzar = false) => {

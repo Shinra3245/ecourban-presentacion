@@ -1,5 +1,6 @@
 import type { Vec3 } from "./animacionPersona";
 import urlIntegranteV4 from "../../modelos/persona-piloto/integrante_v4_generado/persona-articulada-integrante-v4.glb?url";
+import urlIntegranteV4Lite from "../../modelos/persona-piloto/integrante_v4_generado/persona-articulada-integrante-v4-mobile.glb?url";
 
 /**
  * Contrato adaptable por modelo GLB.
@@ -38,6 +39,8 @@ export interface PerfilRigPersona {
   id: string;
   /** Ruta publica del GLB skinned. */
   urlModelo: string;
+  /** Variante cuantizada y con textura reducida para teléfonos y tabletas. */
+  urlModeloLite?: string;
   /** Rotacion Euler XYZ (rad) para alinear el modelo en reposo a Y-up mirando hacia +Z. */
   rotacionBase: Vec3;
   /** Factor de escala uniforme para normalizar la estatura del modelo (~1.75 m). */
@@ -60,6 +63,7 @@ export interface PerfilRigPersona {
 export const PERFIL_ACTION_SUIT: PerfilRigPersona = {
   id: "integrante-ecourban-v4",
   urlModelo: urlIntegranteV4,
+  urlModeloLite: urlIntegranteV4Lite,
   rotacionBase: [0, 0, 0],
   escalaAltura: 0.94,
   alturaCaderaReposo: 0.9795,

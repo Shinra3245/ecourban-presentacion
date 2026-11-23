@@ -1,6 +1,7 @@
 import { useFrame, useLoader, useThree } from "@react-three/fiber";
 import { useEffect, useLayoutEffect, useMemo, useRef } from "react";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import { MeshoptDecoder } from "three/examples/jsm/libs/meshopt_decoder.module.js";
 import type { PoseCanonica, Vec3 } from "./animacionPersona";
 import { crearAdaptadorRigPersona } from "./adaptadorRigPersona";
 import type { PerfilRigPersona } from "./perfilRigPersona";
@@ -20,6 +21,8 @@ interface Props {
   rotacionY?: number;
   /** Sombras proyectadas y recibidas (desactivadas en perfil lite). */
   sombras?: boolean;
+  /** Selecciona el GLB comprimido para dispositivos móviles y entrada táctil. */
+  lite?: boolean;
 }
 
 const ORIGEN: Vec3 = [0, 0, 0];
@@ -36,8 +39,10 @@ export function Persona({
   posicion = ORIGEN,
   rotacionY = 0,
   sombras = true,
+  lite = false,
 }: Props) {
-  const gltf = useLoader(GLTFLoader, perfil.urlModelo);
+  const url = lite && perfil.urlModeloLite ? perfil.urlModeloLite : perfil.urlModelo;
+  const gltf = useLoader(GLTFLoader, url, (loader) => loader.setMeshoptDecoder(MeshoptDecoder));
   const invalidate = useThree((s) => s.invalidate);
 
   const adaptador = useMemo(
@@ -49,7 +54,7 @@ export function Persona({
 
   const ultimaPoseRef = useRef<PoseCanonica | null>(null);
   const ultimaVisibleRef = useRef<boolean | null>(null);
-  const posKey = `${posicion[0]},${posicion[1]},${posicion[2]},${rotacionY}`;
+  const posKey = `${posicion[0]},${posicion[1]},${posicion[2]},${rotacionY},${url}`;
   const ultimaPosKeyRef = useRef<string>("");
 
   const sincronizar = () => {

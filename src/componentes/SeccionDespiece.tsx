@@ -85,6 +85,7 @@ export function SeccionDespiece({ webgl, reducido, lite, capitulo, alCambiarCapi
   const indicadorActual = useRef<string | null>(null);
   const [sinEscena, setSinEscena] = useState(false);
   const [personaPreparada, setPersonaPreparada] = useState(false);
+  const [escenaMontada, setEscenaMontada] = useState(true);
   const personaPreparadaRef = useRef(false);
   const conEscena = webgl && !sinEscena;
 
@@ -160,6 +161,9 @@ export function SeccionDespiece({ webgl, reducido, lite, capitulo, alCambiarCapi
   const avanzar = useCallback(
     (p: number) => {
       ultimoProgreso.current = p;
+      // El lienzo del despiece termina completamente fundido al final del recorrido.
+      // Liberamos ese contexto WebGL para la escena de fabricación y lo reabrimos al volver.
+      setEscenaMontada(p < 0.9995);
       if (!personaPreparadaRef.current && p >= 0.78) {
         personaPreparadaRef.current = true;
         setPersonaPreparada(true);
@@ -246,13 +250,13 @@ export function SeccionDespiece({ webgl, reducido, lite, capitulo, alCambiarCapi
           </div>
         </div>
         <div className="lienzo">
-          {conEscena ? (
+          {conEscena ? escenaMontada ? (
             <LimiteError fallback={<ErrorEscena onFallo={() => setSinEscena(true)} />}>
               <Suspense fallback={null}>
                 <Escena lite={lite} personaPreparada={personaPreparada} />
               </Suspense>
             </LimiteError>
-          ) : (
+          ) : null : (
             fallback
           )}
         </div>
